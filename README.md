@@ -13,13 +13,13 @@ This repository serves to generate semi-realistic COVID testing data
 ## Purpose 
 
 This project was implemented to demonstrate streaming COVID data for use in my
-[JConf presentation](https://jconf.dev/session/?id=2521) demo.
+[JConf presentation](https://jconf.dev/session?id=5540) demo.
 
 ## Functionality
 
 This script uses `faker` to generate realistic data, and a `NeDB` wrapper (to
 support promises) to store application state. There are two event types, `NEW`
-and `UPDATED`. Their is a 2:1 ratio for event types.
+and `UPDATED`.
 
 * A new event is effectively a pending state for the test result. The patient is
   symptomatic and took a test, but is awaiting the result.
