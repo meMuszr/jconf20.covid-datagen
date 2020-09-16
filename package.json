@@ -1,5 +1,5 @@
 {
-  "name": "covid-dategen",
+  "name": "covid-datagen",
   "version": "1.0.0",
   "description": "COVID-19 Case event data generator",
   "main": "index.js",

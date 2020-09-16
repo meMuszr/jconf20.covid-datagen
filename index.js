@@ -64,7 +64,7 @@ const NEW_EVENT = "NEW",
 const db = createDataStore();
 
 ( async () => {
-  logger.verbose(`Generating ${options.generate} case events`);
+  logger.verbose(`Generating ${options.generate || 0} case events`);
   for (let i = 0; i < options.generate; i++) {
     const eventType = faker.random.arrayElement(EVENT_TYPES);
     logger.verbose(`Processing ${eventType} event`);
@@ -83,7 +83,9 @@ const db = createDataStore();
         } catch {}
         break;
     }
+    if(event) {
     console.log(JSON.stringify(event));
+    }
   }
 })();
 
@@ -100,7 +102,7 @@ async function handleNewEvent() {
     location: `${faker.address.city()}, ${faker.address.stateAbbr()}`,
     age: Math.floor((Date.now() - dateOfBirth) / (1000 * 3600 * 24 * 365.25)),
     status: NEW_STATUS,
-    event: NEW_EVENT,
+    type: NEW_EVENT,
   };
 
   try {
@@ -142,7 +144,7 @@ async function handleUpdateEvent() {
     finalState = true;
   }
 
-  caseEvent.event = UPDATE_EVENT;
+  caseEvent.type = UPDATE_EVENT;
   caseEvent.status = caseEventStatus;
 
   if(finalState) {
@@ -157,7 +159,7 @@ async function handleUpdateEvent() {
   } else {
     let numReplaced;
     try {
-      numReplaced = await db.update({ _id: caseEvent._id}, { $set: { status: caseEventStatus, event: UPDATE_EVENT }});
+      numReplaced = await db.update({ _id: caseEvent._id}, { $set: { status: caseEventStatus, type: UPDATE_EVENT }});
     } catch(err) {
       logger.error(err);
       throw err;
