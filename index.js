@@ -16,19 +16,21 @@ const { combine, timestamp, printf, colorize, align } = format;
 const optionDefinitions = 
   [
     { name: "generate", alias: "g", type: Number },
-    { name: "help", alias: "h", type: Boolean }
-//  { name: "log-level", alias: "l", type: String },
+    { name: "help", alias: "h", type: Boolean },
+    { name: "clear", alias: "c", type: Boolean }
   ];
 const options = commandLineArgs(optionDefinitions);
 
 if (options.help) {
   console.error(
 `-h --help       show help
--g --generate   amount of case events to generate`
+-g --generate   amount of case events to generate
+-c --clear      clear persistant store`
 // -l --log-level  level to log [info, debug, error, verbose]
   );
   return;
 }
+
 
 const logger = createLogger({
   level: "debug",
@@ -64,6 +66,14 @@ const NEW_EVENT = "NEW",
 const db = createDataStore();
 
 ( async () => {
+  if(options.clear) {
+    logger.verbose("Clearing all documents in persistent store");
+
+    await db.remove({},{multi: true}, (err, removed) => {
+      logger.debug(`Removed ${removed} document(s)`);
+    });
+    return;
+  }
   logger.verbose(`Generating ${options.generate || 0} case events`);
   for (let i = 0; i < options.generate; i++) {
     const eventType = faker.random.arrayElement(EVENT_TYPES);
